@@ -94,46 +94,7 @@ document.querySelector('.sidebar-toggler').addEventListener('click', function() 
 
 
 
-const dashboard = document.getElementById('content-container');
-const salesSection = document.getElementById('sales-section');
-const revenueSection = document.getElementById('revenue-section');
-const salesLink = document.getElementById('sales-link');
-const revenueLink = document.getElementById('revenue-link');
-const dashboardLink = document.getElementById('dashboard-link');
 
-function showSalesSection() {
-    salesSection.style.display = 'block';
-    revenueSection.style.display = 'none';
-    dashboard.style.display = 'none';
-    
-    salesLink.classList.add('active');
-    revenueLink.classList.remove('active');
-    dashboardLink.classList.remove('active');
-}
 
-function showDashboardSection() {
-    dashboard.style.display = 'block';
-    salesSection.style.display = 'none';
-    revenueSection.style.display = 'none';
-
-    dashboardLink.classList.add('active');
-    salesLink.classList.remove('active');
-    revenueLink.classList.remove('active');
-}
-
-function showRevenueSection() {
-    dashboard.style.display = 'none';
-    salesSection.style.display = 'none';
-    revenueSection.style.display = 'block';
-
-    revenueLink.classList.add('active');
-    salesLink.classList.remove('active');
-    dashboardLink.classList.remove('active');
-}
-
-salesLink.addEventListener('click', showSalesSection);
-revenueLink.addEventListener('click', showRevenueSection);
-dashboardLink.addEventListener('click', showDashboardSection);
-showDashboardSection();
 
 
