@@ -1,25 +1,40 @@
 <?php
 
 include "connexion.php";
+$query_cate = "SELECT * from categorie ";
+$result_cate = mysqli_query($conn, $query_cate);
+$query_artisant = "SELECT * from artisant ";
+$result_artisant = mysqli_query($conn, $query_artisant);
+$query_mate = "SELECT * from materiel ";
+$result_mate = mysqli_query($conn, $query_mate);
 if (isset($_POST['submit'])) {
-    $nom = $_POST['nom'];
-    $query = "INSERT INTO materiel (nom) VALUES ('$nom')";
+    $nom = $_POST['nom_prod'];
+    $descreption = $_POST['descreption'];
+    $prix = $_POST['prix'];
+    $artisant = $_POST['artisant'];
+    $categorie = $_POST['categorie'];
+    $materiel = $_POST['materiel'];
+    $photo = $_FILES['photo']['name'];
+    $temp_name = $_FILES['photo']['tmp_name'];
+    $folder = "img/" . $photo;
+    if (move_uploaded_file($temp_name, $folder)) {
+        echo "File moved successfully.";
+    } else {
+        echo "Error moving file.";
+    }
+    $query = "INSERT INTO produit (nom,descreption,prix,photo,artisant_id,materiel_id,utilisateur_id) 
+    VALUES ('$nom','$descreption',$prix,'$folder',$artisant,$materiel,2)";
     $result = mysqli_query($conn, $query);
+    $last_id = mysqli_insert_id($conn);
+    $query2 = "INSERT INTO categorie_produit (categorie_id, produit_id) VALUES ($categorie, $last_id)";
+    mysqli_query($conn, $query2);
     if ($result) {
-        header("Location: {$_SERVER['REQUEST_URI']}");
+        header("Location:produits.php");
         exit();
     } else {
         echo "Error: " . mysqli_error($conn);
     }
 };
-$query1 = "SELECT * from materiel ";
-$result1 = mysqli_query($conn, $query1);
-
-
-
-
-
-
 ?>
 
 <!DOCTYPE html>
@@ -51,6 +66,41 @@ $result1 = mysqli_query($conn, $query1);
         .cube {
             height: 10vh !important;
 
+        }
+
+        .card {
+            width: 100%;
+            border: none;
+            background-color: transparent;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .card img {
+            width: 200px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        .card label {
+            margin-top: 30px;
+            text-align: center;
+            height: 40px;
+            cursor: pointer;
+            font-weight: bold;
+            margin-bottom: 20px;
+            color: white;
+        }
+
+        .form-input-label,
+        .form-label {
+            color: white;
+
+        }
+
+        .card input {
+            display: none;
         }
     </style>
     <div class="container-xxl position-relative bg-white d-flex p-0">
@@ -181,62 +231,77 @@ $result1 = mysqli_query($conn, $query1);
                         <div class="col-sm-12 col-xl-12">
                             <div class="bg-dark text-center rounded p-4">
 
-                                <a href="#" class="btn btn-success mb-3" data-bs-toggle="modal" data-bs-target="#addModal" data-aos="fade-down" data-aos-duration="1500">Add New</a>
-
-                                <!-- Add Modal -->
-                                <div class="modal fade" id="addModal" tabindex="-1" aria-labelledby="addModalLabel" aria-hidden="true">
-                                    <div class="modal-dialog">
-                                        <div class="modal-content">
-                                            <div class="modal-header">
-                                                <h5 class="modal-title" id="addModalLabel">Add New Record</h5>
-                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                <div class="container d-flex justify-content-center" style="margin-top:5%;">
+                                    <form action="add_prod.php" method="POST" enctype="multipart/form-data" style="width:50vw; min-width:300px;">
+                                        <div class="card">
+                                            <img src="img/user.png" alt="image" id="image">
+                                            <label for="input-file">Choose Image</label>
+                                            <input type="file" accept="image/jpg , image/png , image/jpeg" id="input-file" name="photo" required>
+                                        </div>
+                                        <div class="row mb-3">
+                                            <div class="col">
+                                                <label class="form-label">nom de produit:</label>
+                                                <input type="text" class="form-control" name="nom_prod" placeholder="nom de produit" required>
                                             </div>
-                                            <div class="modal-body">
-                                                <form action="materiels.php" method="post">
-                                                    <div class="mb-3">
-                                                        <label class="form-label">Nom:</label>
-                                                        <input type="text" class="form-control" name="nom" placeholder="Entrer le nom de materiel" required>
-                                                    </div>
-                                                    <div class="modal-footer">
-                                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                                        <button type="submit" name="submit" class="btn btn-primary">Save changes</button>
-                                                    </div>
-                                                </form>
+
+                                            <div class="col">
+                                                <label class="form-label">Descreption:</label>
+                                                <input type="text" class="form-control" name="descreption" placeholder="description" required>
                                             </div>
                                         </div>
-                                    </div>
+                                        <div class="mb-3">
+                                            <label class="form-label">Prix:</label>
+                                            <input type="number" class="form-control" name="prix" placeholder="prix en MAD" required>
+                                        </div>
+
+                                        <div class="mb-3">
+                                            <label class="form-label">artisants:</label>
+
+                                            <select name="artisant" class="form-control">
+                                                <option value="">all</option>
+
+                                                <?php
+                                                while ($row_artisant = mysqli_fetch_assoc($result_artisant)) {
+                                                    echo '<option value="' . $row_artisant['id'] . '">' . $row_artisant['nom'] . ' ' . $row_artisant['prenom'] . '</option>';
+                                                }
+                                                ?>
+                                            </select>
+                                        </div>
+                                        <div class="row mb-3">
+                                            <div class="col">
+                                                <label class="form-label">categorie:</label>
+
+                                                <select name="categorie" class="form-control">
+                                                    <option value="">all</option>
+
+                                                    <?php
+                                                    while ($row_cate = mysqli_fetch_assoc($result_cate)) {
+                                                        echo '<option value="' . $row_cate['id'] . '">' . $row_cate['nom'] .  '</option>';
+                                                    }
+                                                    ?>
+                                                </select>
+                                            </div>
+
+                                            <div class="col">
+                                                <label class="form-label">materiel:</label>
+
+                                                <select name="materiel" class="form-control">
+                                                    <option value="">all</option>
+                                                    <?php
+                                                    while ($row_materiel = mysqli_fetch_assoc($result_mate)) {
+                                                        echo '<option value="' . $row_materiel['id'] . '">' . $row_materiel['nom'] .  '</option>';
+                                                    }
+                                                    ?>
+                                                </select>
+                                            </div>
+                                        </div>
+
+                                        <div class="row ms-1 mt-4 justify-content-center">
+                                            <button type="submit" name="submit" class="btn btn-success col-3 me-3">Save changes</button>
+                                            <a href="produits.php" class="btn btn-danger col-3">Cancel</a>
+                                        </div>
+                                    </form>
                                 </div>
-
-
-                                <table class="table table-hover text-center">
-                                    <thead class="table-dark">
-                                        <tr data-aos="fade-left" data-aos-duration="1500">
-                                            <th scope="col-6" data-aos="fade-left"> nom</th>
-
-                                            <th scope="col-6" data-aos="fade-left">Action</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody data-aos="fade-right" data-aos-duration="1500">
-                                        <?php
-                                        while ($row = mysqli_fetch_assoc($result1)) {
-                                        ?>
-                                            <tr>
-                                                <td><?= $row['nom']; ?></td>
-
-                                                <td>
-                                                    <a href="edit_mate.php?id=<?= $row['id'] ?>" class="link-dark">
-                                                        <i class='bx bxs-pencil fs-5 me-3'></i>
-                                                    </a>
-                                                    <a href="delete_mate.php?id=<?= $row['id'] ?>" class="link-danger">
-                                                        <i class='bx bxs-user-x fs-5'></i>
-                                                    </a>
-                                                </td>
-
-                                            </tr>
-                                        <?php }; ?>
-                                    </tbody>
-                                </table>
-
 
                             </div>
                         </div>
@@ -260,5 +325,13 @@ $result1 = mysqli_query($conn, $query1);
 <script>
     AOS.init();
 </script>
+<script>
+      let image = document.getElementById("image");
+      let input = document.getElementById("input-file");
+
+      input.onchange=()=>{
+         image.src= URL.createObjectURL(input.files[0]);
+      }
+    </script>
 
 </html>

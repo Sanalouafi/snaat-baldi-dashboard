@@ -3,7 +3,10 @@
 include "connexion.php";
 if (isset($_POST['submit'])) {
     $nom = $_POST['nom'];
-    $query = "INSERT INTO materiel (nom) VALUES ('$nom')";
+    $prenom = $_POST['prenom'];
+    $age = $_POST['age'];
+
+    $query = "INSERT INTO artisant (nom,prenom,age) VALUES ('$nom','$prenom',$age)";
     $result = mysqli_query($conn, $query);
     if ($result) {
         header("Location: {$_SERVER['REQUEST_URI']}");
@@ -12,7 +15,7 @@ if (isset($_POST['submit'])) {
         echo "Error: " . mysqli_error($conn);
     }
 };
-$query1 = "SELECT * from materiel ";
+$query1 = "SELECT * from artisant ";
 $result1 = mysqli_query($conn, $query1);
 
 
@@ -192,10 +195,18 @@ $result1 = mysqli_query($conn, $query1);
                                                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                             </div>
                                             <div class="modal-body">
-                                                <form action="materiels.php" method="post">
+                                                <form action="artisants.php" method="post">
                                                     <div class="mb-3">
                                                         <label class="form-label">Nom:</label>
-                                                        <input type="text" class="form-control" name="nom" placeholder="Entrer le nom de materiel" required>
+                                                        <input type="text" class="form-control" name="nom" placeholder="nom" required>
+                                                    </div>
+                                                    <div class="mb-3">
+                                                        <label class="form-label">Prenom:</label>
+                                                        <input type="text" class="form-control" name="prenom" placeholder="prenom" required>
+                                                    </div>
+                                                    <div class="mb-3">
+                                                        <label class="form-label">Age:</label>
+                                                        <input type="text" class="form-control" name="age" placeholder="age" required>
                                                     </div>
                                                     <div class="modal-footer">
                                                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
@@ -212,6 +223,8 @@ $result1 = mysqli_query($conn, $query1);
                                     <thead class="table-dark">
                                         <tr data-aos="fade-left" data-aos-duration="1500">
                                             <th scope="col-6" data-aos="fade-left"> nom</th>
+                                            <th scope="col-6" data-aos="fade-left"> prenom</th>
+                                            <th scope="col-6" data-aos="fade-left"> age</th>
 
                                             <th scope="col-6" data-aos="fade-left">Action</th>
                                         </tr>
@@ -222,17 +235,20 @@ $result1 = mysqli_query($conn, $query1);
                                         ?>
                                             <tr>
                                                 <td><?= $row['nom']; ?></td>
+                                                <td><?= $row['prenom']; ?></td>
+                                                <td><?= $row['age']; ?></td>
 
                                                 <td>
-                                                    <a href="edit_mate.php?id=<?= $row['id'] ?>" class="link-dark">
+                                                    <a href="edit_artis.php?id=<?= $row['id'] ?>" class="link-dark">
                                                         <i class='bx bxs-pencil fs-5 me-3'></i>
                                                     </a>
-                                                    <a href="delete_mate.php?id=<?= $row['id'] ?>" class="link-danger">
+                                                    <a href="delete_artis.php?id=<?= $row['id'] ?>" class="link-danger">
                                                         <i class='bx bxs-user-x fs-5'></i>
                                                     </a>
                                                 </td>
 
                                             </tr>
+
                                         <?php }; ?>
                                     </tbody>
                                 </table>

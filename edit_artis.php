@@ -1,26 +1,33 @@
 <?php
-
 include "connexion.php";
+$id = $_GET['id'];
+
+$query = "SELECT * FROM `artisant` WHERE id = $id";
+$result = mysqli_query($conn, $query);
+$row = mysqli_fetch_assoc($result);
+
 if (isset($_POST['submit'])) {
+
     $nom = $_POST['nom'];
-    $query = "INSERT INTO materiel (nom) VALUES ('$nom')";
+    $prenom = $_POST['prenom'];
+    $age = $_POST['age'];
+
+    $query = "UPDATE artisant SET nom='$nom',prenom='$prenom',age='$age' WHERE id = $id";
     $result = mysqli_query($conn, $query);
-    if ($result) {
-        header("Location: {$_SERVER['REQUEST_URI']}");
-        exit();
+
+    if (isset($result)) {
+        header("location:artisants.php");
     } else {
-        echo "Error: " . mysqli_error($conn);
+        echo ("error");
     }
-};
-$query1 = "SELECT * from materiel ";
-$result1 = mysqli_query($conn, $query1);
-
-
-
-
-
+}
 
 ?>
+
+
+
+
+
 
 <!DOCTYPE html>
 <html lang="en">
@@ -46,15 +53,15 @@ $result1 = mysqli_query($conn, $query1);
     <link href="css/dashboard.css" rel="stylesheet">
 </head>
 
-<body>
+<body class="bg-dark text-light">
+
     <style>
         .cube {
             height: 10vh !important;
 
         }
     </style>
-    <div class="container-xxl position-relative bg-white d-flex p-0">
-
+    <div class="container-xxxl position-relative bg-white d-flex p-0">
         <div class="sidebar pe-4 pb-3">
             <nav style="background: #28323A;" class="navbar bg-light navbar-light">
                 <a href="dashboard.html" class="navbar-brand mx-4 mb-3">
@@ -75,8 +82,6 @@ $result1 = mysqli_query($conn, $query1);
                     <a href="dashboard.php" class="nav-item nav-link active" id="dashboard-link"><i class="fa fa-tachometer-alt me-2"></i>Dashboard</a>
                     <a href="categories.php" class="nav-item nav-link "><i class="fa fa-tachometer-alt me-2"></i>Categories</a>
                     <a href="materiels.php" class="nav-item nav-link "><i class="fa fa-tachometer-alt me-2"></i>Materiels</a>
-                    <a href="artisants.php" class="nav-item nav-link "><i class="fa fa-tachometer-alt me-2"></i>Artisants</a>
-
                     <a href="produits.php" class="nav-item nav-link "><i class="fa fa-tachometer-alt me-2"></i>produits</a>
 
 
@@ -174,91 +179,49 @@ $result1 = mysqli_query($conn, $query1);
             </nav>
 
 
-
             <div class="container-fluid pt-4 px-4" id="content">
                 <div class="container-fluid pt-4 px-4">
                     <div class="row g-4">
                         <div class="col-sm-12 col-xl-12">
                             <div class="bg-dark text-center rounded p-4">
+                                <div class="container mt-5">
 
-                                <a href="#" class="btn btn-success mb-3" data-bs-toggle="modal" data-bs-target="#addModal" data-aos="fade-down" data-aos-duration="1500">Add New</a>
 
-                                <!-- Add Modal -->
-                                <div class="modal fade" id="addModal" tabindex="-1" aria-labelledby="addModalLabel" aria-hidden="true">
-                                    <div class="modal-dialog">
-                                        <div class="modal-content">
-                                            <div class="modal-header">
-                                                <h5 class="modal-title" id="addModalLabel">Add New Record</h5>
-                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    <div class="container d-flex justify-content-center" style="margin-top:10%;">
+                                        <form action="" method="post" style="width:50vw; min-width:300px;">
+                                            <div class="col d-flex justify-content-center gap-5">
+                                                <label class="form-label">Nom:</label>
+                                                <input type="text" class="form-control" name="nom" placeholder="nom " value="<?php echo $row['nom'] ?>">
                                             </div>
-                                            <div class="modal-body">
-                                                <form action="materiels.php" method="post">
-                                                    <div class="mb-3">
-                                                        <label class="form-label">Nom:</label>
-                                                        <input type="text" class="form-control" name="nom" placeholder="Entrer le nom de materiel" required>
-                                                    </div>
-                                                    <div class="modal-footer">
-                                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                                        <button type="submit" name="submit" class="btn btn-primary">Save changes</button>
-                                                    </div>
-                                                </form>
+                                            <div class="col d-flex justify-content-center gap-5">
+                                                <label class="form-label">prenom:</label>
+                                                <input type="text" class="form-control" name="prenom" placeholder="prenom" value="<?php echo $row['prenom'] ?>">
                                             </div>
-                                        </div>
+                                            <div class="col d-flex justify-content-center gap-5">
+                                                <label class="form-label">age:</label>
+                                                <input type="text" class="form-control" name="age" placeholder="age" value="<?php echo $row['age'] ?>">
+                                            </div>
+
+
+                                            <div class="row ms-1 mt-4 justify-content-end">
+                                                <button type="submit" class="btn btn-success col-3 me-3" name="submit">Update</button>
+                                                <a href="categories.php" class="btn btn-danger col-3">Cancel</a>
+                                            </div>
+                                        </form>
                                     </div>
                                 </div>
-
-
-                                <table class="table table-hover text-center">
-                                    <thead class="table-dark">
-                                        <tr data-aos="fade-left" data-aos-duration="1500">
-                                            <th scope="col-6" data-aos="fade-left"> nom</th>
-
-                                            <th scope="col-6" data-aos="fade-left">Action</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody data-aos="fade-right" data-aos-duration="1500">
-                                        <?php
-                                        while ($row = mysqli_fetch_assoc($result1)) {
-                                        ?>
-                                            <tr>
-                                                <td><?= $row['nom']; ?></td>
-
-                                                <td>
-                                                    <a href="edit_mate.php?id=<?= $row['id'] ?>" class="link-dark">
-                                                        <i class='bx bxs-pencil fs-5 me-3'></i>
-                                                    </a>
-                                                    <a href="delete_mate.php?id=<?= $row['id'] ?>" class="link-danger">
-                                                        <i class='bx bxs-user-x fs-5'></i>
-                                                    </a>
-                                                </td>
-
-                                            </tr>
-                                        <?php }; ?>
-                                    </tbody>
-                                </table>
-
-
                             </div>
                         </div>
                     </div>
                 </div>
-
-
-
             </div>
         </div>
-    </div>
-    <!-- Content End -->
 
 
-    <!-- JavaScript Libraries -->
-    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
-    <script src="js/chart.min.js"></script>
-    <script src="js/dashboard.js"></script>
+
+        <!-- Bootstrap -->
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4" crossorigin="anonymous"></script>
+
 </body>
-<script>
-    AOS.init();
-</script>
 
 </html>
