@@ -165,10 +165,11 @@ if (isset($_POST['submit'])) {
                     </div>
                 </div>
                 <div class="navbar-nav w-100">
-                    <a href="dashboard.php" class="nav-item nav-link active" id="dashboard-link"><i class="fa fa-tachometer-alt me-2"></i>Dashboard</a>
+                    <a href="dashboard.php" class="nav-item nav-link" id="dashboard-link"><i class="fa fa-tachometer-alt me-2"></i>Dashboard</a>
                     <a href="categories.php" class="nav-item nav-link "><i class="fa fa-tachometer-alt me-2"></i>Categories</a>
                     <a href="materiels.php" class="nav-item nav-link "><i class="fa fa-tachometer-alt me-2"></i>Materiels</a>
-                    <a href="produits.php" class="nav-item nav-link "><i class="fa fa-tachometer-alt me-2"></i>produits</a>
+                    <a href="artisants.php" class="nav-item nav-link "><i class="fa fa-tachometer-alt me-2"></i>Artisant</a>
+                    <a href="produits.php" class="nav-item nav-link active"><i class="fa fa-tachometer-alt me-2"></i>produits</a>
 
 
                 </div>
@@ -342,7 +343,7 @@ if (isset($_POST['submit'])) {
 
                                             <div class="row ms-1 mt-4 justify-content-end">
                                                 <button type="submit" class="btn btn-success col-3 me-3" name="submit">Update</button>
-                                                <a href="categories.php" class="btn btn-danger col-3">Cancel</a>
+                                                <a href="produits.php" class="btn btn-danger col-3">Cancel</a>
                                             </div>
                                         </form>
                                     </div>
@@ -359,6 +360,23 @@ if (isset($_POST['submit'])) {
         <!-- Bootstrap -->
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4" crossorigin="anonymous"></script>
         <script>
+            // Sidebar Toggler
+            document
+                .querySelector(".sidebar-toggler")
+                .addEventListener("click", function() {
+                    document.querySelector(".sidebar").classList.toggle("open");
+                    document.querySelector(".content").classList.toggle("open");
+                    return false;
+                });
+            var currentPage = window.location.href;
+
+            var navLinks = document.querySelectorAll(".navbar-nav .nav-link");
+
+            navLinks.forEach(function(link) {
+                if (link.href === currentPage) {
+                    link.classList.add("active");
+                }
+            });
             let image = document.getElementById("image");
             let input = document.getElementById("input-file");
 

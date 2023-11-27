@@ -122,12 +122,11 @@ if (isset($_POST['submit'])) {
                     </div>
                 </div>
                 <div class="navbar-nav w-100">
-                    <a href="dashboard.php" class="nav-item nav-link active" id="dashboard-link"><i class="fa fa-tachometer-alt me-2"></i>Dashboard</a>
+                    <a href="dashboard.php" class="nav-item nav-link" id="dashboard-link"><i class="fa fa-tachometer-alt me-2"></i>Dashboard</a>
                     <a href="categories.php" class="nav-item nav-link "><i class="fa fa-tachometer-alt me-2"></i>Categories</a>
                     <a href="materiels.php" class="nav-item nav-link "><i class="fa fa-tachometer-alt me-2"></i>Materiels</a>
-                    <a href="artisants.php" class="nav-item nav-link "><i class="fa fa-tachometer-alt me-2"></i>Artisants</a>
-
-                    <a href="produits.php" class="nav-item nav-link "><i class="fa fa-tachometer-alt me-2"></i>produits</a>
+                    <a href="artisants.php" class="nav-item nav-link "><i class="fa fa-tachometer-alt me-2"></i>Artisant</a>
+                    <a href="produits.php" class="nav-item nav-link active"><i class="fa fa-tachometer-alt me-2"></i>produits</a>
 
 
                 </div>
@@ -326,12 +325,29 @@ if (isset($_POST['submit'])) {
     AOS.init();
 </script>
 <script>
-      let image = document.getElementById("image");
-      let input = document.getElementById("input-file");
+    // Sidebar Toggler
+    document
+        .querySelector(".sidebar-toggler")
+        .addEventListener("click", function() {
+            document.querySelector(".sidebar").classList.toggle("open");
+            document.querySelector(".content").classList.toggle("open");
+            return false;
+        });
+    var currentPage = window.location.href;
 
-      input.onchange=()=>{
-         image.src= URL.createObjectURL(input.files[0]);
-      }
-    </script>
+    var navLinks = document.querySelectorAll(".navbar-nav .nav-link");
+
+    navLinks.forEach(function(link) {
+        if (link.href === currentPage) {
+            link.classList.add("active");
+        }
+    });
+    let image = document.getElementById("image");
+    let input = document.getElementById("input-file");
+
+    input.onchange = () => {
+        image.src = URL.createObjectURL(input.files[0]);
+    }
+</script>
 
 </html>

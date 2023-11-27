@@ -48,9 +48,10 @@
                     </div>
                 </div>
                 <div class="navbar-nav w-100">
-                    <a href="dashboard.php" class="nav-item nav-link active" id="dashboard-link"><i class="fa fa-tachometer-alt me-2"></i>Dashboard</a>
+                    <a href="dashboard.php" class="nav-item nav-link" id="dashboard-link"><i class="fa fa-tachometer-alt me-2"></i>Dashboard</a>
                     <a href="categories.php" class="nav-item nav-link "><i class="fa fa-tachometer-alt me-2"></i>Categories</a>
                     <a href="materiels.php" class="nav-item nav-link "><i class="fa fa-tachometer-alt me-2"></i>Materiels</a>
+                    <a href="artisants.php" class="nav-item nav-link "><i class="fa fa-tachometer-alt me-2"></i>Artisant</a>
                     <a href="produits.php" class="nav-item nav-link "><i class="fa fa-tachometer-alt me-2"></i>produits</a>
 
 
@@ -348,7 +349,17 @@
     <script src="js/dashboard.js"></script>
 </body>
 <script>
+    var currentPage = window.location.href;
+
+    var navLinks = document.querySelectorAll(".navbar-nav .nav-link");
+
+    navLinks.forEach(function(link) {
+        if (link.href === currentPage) {
+            link.classList.add("active");
+        }
+    });
     AOS.init();
 </script>
+
 
 </html>
