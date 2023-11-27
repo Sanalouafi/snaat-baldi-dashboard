@@ -8,7 +8,7 @@ $row = mysqli_fetch_assoc($result);
 
 if (isset($_POST['submit'])) {
 
-    $nom = $_POST['nom'];
+    $nom = mysqli_real_escape_string($conn,$_POST['nom']);
     $query = "UPDATE `materiel` SET `nom`='$nom' WHERE id = $id";
     $result = mysqli_query($conn, $query);
 

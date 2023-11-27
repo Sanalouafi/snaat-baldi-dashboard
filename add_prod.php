@@ -8,9 +8,9 @@ $result_artisant = mysqli_query($conn, $query_artisant);
 $query_mate = "SELECT * from materiel ";
 $result_mate = mysqli_query($conn, $query_mate);
 if (isset($_POST['submit'])) {
-    $nom = $_POST['nom_prod'];
-    $descreption = $_POST['descreption'];
-    $prix = $_POST['prix'];
+    $nom =mysqli_real_escape_string($conn,$_POST['nom_prod']) ;
+    $descreption = mysqli_real_escape_string($conn,$_POST['descreption']);
+    $prix =mysqli_real_escape_string($conn, $_POST['prix']);
     $artisant = $_POST['artisant'];
     $categorie = $_POST['categorie'];
     $materiel = $_POST['materiel'];

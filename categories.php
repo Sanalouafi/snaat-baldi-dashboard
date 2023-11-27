@@ -2,7 +2,7 @@
 
 include "connexion.php";
 if (isset($_POST['submit'])) {
-    $nom = $_POST['nom'];
+    $nom = mysqli_real_escape_string($conn,$_POST['nom']);
     $query = "INSERT INTO categorie (nom) VALUES ('$nom')";
     $result = mysqli_query($conn, $query);
     if ($result) {

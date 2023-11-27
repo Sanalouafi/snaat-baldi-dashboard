@@ -8,9 +8,9 @@ $row = mysqli_fetch_assoc($result);
 
 if (isset($_POST['submit'])) {
 
-    $nom = $_POST['nom'];
-    $prenom = $_POST['prenom'];
-    $age = $_POST['age'];
+    $nom = mysqli_real_escape_string($conn,$_POST['nom']);
+    $prenom = mysqli_real_escape_string($conn,$_POST['prenom']);
+    $age = mysqli_real_escape_string($conn,$_POST['age']);
 
     $query = "UPDATE artisant SET nom='$nom',prenom='$prenom',age='$age' WHERE id = $id";
     $result = mysqli_query($conn, $query);
